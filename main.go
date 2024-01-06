@@ -2,13 +2,17 @@ package main
 
 import (
 	"flag"
+	"github.com/has1985/bot_useful/clients/telegram"
 	"log"
 )
 
-func main() {
-	t:= mastToken() //token
+const (
+	tgBotHost = "api.telegram.org"
+)
 
-	//tgClient := telegram.New(token)
+func main() {
+
+	tgClient := telegram.New(tgBotHost, mastToken())
 
 	//fetcher := fetcher.New()
 
