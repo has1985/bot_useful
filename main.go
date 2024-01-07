@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	tgBotHost = "api.telegram.org"
+	tgBotHost = "api.telegram.org" //make it a configurable parameter
 )
 
 func main() {
