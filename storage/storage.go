@@ -10,7 +10,7 @@ import (
 
 type Storage interface {
 	Save(p *Page) error
-	PickRandom(userName string) (*Page, error)
+	PickRandom(chatID int, userName string) (*Page, error)
 	Remove(p *Page) error
 	IsExist(p *Page) (bool, error)
 }
@@ -20,6 +20,7 @@ var ErrNoSavedPages = errors.New("no saved page")
 type Page struct {
 	URL      string
 	UserName string
+	ID       int
 }
 
 func (p Page) Hash() (string, error) {
