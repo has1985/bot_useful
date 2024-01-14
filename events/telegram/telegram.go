@@ -5,7 +5,7 @@ import (
 	"github.com/has1985/bot_useful/clients/telegram"
 	"github.com/has1985/bot_useful/events"
 	"github.com/has1985/bot_useful/lib/e"
-	"github.com/has1985/bot_useful/lib/storage"
+	"github.com/has1985/bot_useful/storage"
 )
 
 type Processor struct {
@@ -53,7 +53,6 @@ func (p *Processor) Fetch(limit int) ([]events.Event, error) {
 func (p *Processor) Process(event events.Event) error {
 	switch event.Type {
 	case events.Message:
-
 		return p.processorMessage(event)
 	default:
 		return e.Wrap("can't process message", ErrUnknownEvent)

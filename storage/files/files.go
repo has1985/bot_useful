@@ -5,10 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"github.com/has1985/bot_useful/lib/e"
-	"github.com/has1985/bot_useful/lib/storage"
+	"github.com/has1985/bot_useful/storage"
 	"math/rand"
 	"os"
 	"path/filepath"
+	"strconv"
 	"time"
 )
 
@@ -28,9 +29,9 @@ func (s Storage) Save(page *storage.Page) (err error) {
 
 	defer func() { err = e.WrapIfErr("can't save page", err) }()
 
-	fPath := filepath.Join(s.basePath, page.UserName)
-
-	if err := os.Mkdir(fPath, defaultPerm); err != nil {
+	fPath := filepath.Join(s.basePath, strconv.Itoa(page.ID), page.UserName)
+	///////////////////////////////////////////////////////
+	if err := os.MkdirAll(fPath, defaultPerm); err != nil {
 		return err
 	}
 
@@ -54,10 +55,10 @@ func (s Storage) Save(page *storage.Page) (err error) {
 	return nil
 }
 
-func (s Storage) PickRandom(userName string) (page *storage.Page, err error) {
+func (s Storage) PickRandom(chatID int, userName string) (page *storage.Page, err error) {
 	defer func() { err = e.WrapIfErr("can't pick random page", err) }()
 
-	path := filepath.Join(s.basePath, userName)
+	path := filepath.Join(s.basePath, strconv.Itoa(chatID), userName)
 
 	files, err := os.ReadDir(path)
 	if err != nil {
@@ -82,7 +83,7 @@ func (s Storage) Remove(p *storage.Page) error {
 		return e.Wrap("can't remove file", err)
 	}
 
-	path := filepath.Join(s.basePath, p.UserName, fileName)
+	path := filepath.Join(s.basePath, strconv.Itoa(p.ID), p.UserName, fileName)
 
 	if err := os.Remove(path); err != nil {
 		return e.Wrap(fmt.Sprintf("can't remove file %s", path), err)
@@ -96,7 +97,7 @@ func (s Storage) IsExist(p *storage.Page) (bool, error) {
 		return false, e.Wrap("can't check if file exist", err)
 	}
 
-	path := filepath.Join(s.basePath, p.UserName, fileName)
+	path := filepath.Join(s.basePath, strconv.Itoa(p.ID), p.UserName, fileName)
 
 	switch _, err = os.Stat(path); {
 	case errors.Is(err, os.ErrNotExist):
